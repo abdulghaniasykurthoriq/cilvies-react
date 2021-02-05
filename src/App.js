@@ -1,10 +1,15 @@
 import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import RoutePage from './route'
+import { Provider } from 'react-redux';
+import { store } from './config';
 
 function App() {
   return (
     <div className="App">
-      <RoutePage/>
+      <Provider store={store}>
+         <RoutePage/>
+      </Provider>
     </div>
   );
 }

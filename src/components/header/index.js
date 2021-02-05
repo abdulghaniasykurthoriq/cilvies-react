@@ -1,13 +1,25 @@
 import React from 'react'
-import {HeaderElement, HeaderWrap, Logo} from './HeaderStyled'
-import { FaBars } from 'react-icons/fa'
+import {HeaderElement, HeaderWrap, ToggleBar, Notification, Logo} from './HeaderStyled'
+import { FaBars, FaBell } from 'react-icons/fa'
 
-const Header = () => {
+const Header = (props) => {
     return (
         <HeaderElement>
             <HeaderWrap>
-                <FaBars/>
+                <ToggleBar>
+                <FaBars onClick={props.onClick}/>
+                </ToggleBar>
+                <div>
                 <Logo>CILVIES</Logo> 
+                </div>
+                <Notification>
+                    <span>9+</span>
+                    <FaBell/>
+                </Notification>
+                
+                
+                
+                
             </HeaderWrap>           
         </HeaderElement>
     )
