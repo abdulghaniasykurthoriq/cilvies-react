@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import UserService from '../../services/UserService'
 
@@ -8,7 +8,7 @@ const Login = () => {
     const[password,setPassword] = useState('')
     const[alert,setAlert]       = useState('')
     const history = useHistory();
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     const stateGlobal = useSelector(state => state)
     console.log('state global', stateGlobal.userReducer)
@@ -27,14 +27,16 @@ const Login = () => {
             history.push('/')
             if(result){
                 localStorage.setItem('token', result.data.token)
+                localStorage.setItem('name', result.data.username)
                 setAlert(result.data.message)
             }
-            UserService.retrieveById(data.id)
-            .then(resultz => {
-              dispatch({type:'UPDATE_USER', payload:result.data})
-              localStorage.setItem('name',resultz.data.data.username)
-              console.log('who are you',resultz.data.data.username)
-            })
+            // UserService.retrieveById(data.id)
+            // .then(resultz => {
+            //   dispatch({type:'UPDATE_USER', payload:result.data})
+
+            //   localStorage.setItem('name',resultz.data.username)
+            //   console.log('who are you',resultz)
+            // })
         })
         .catch(e => {
             console.log(e.response.data)
@@ -47,7 +49,7 @@ const Login = () => {
       return{
         
       }
-    },[SubmitLogin])
+    },[])
 
     const onChangeUsername = (e) => {
         setUsername(e.target.value)

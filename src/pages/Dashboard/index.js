@@ -1,10 +1,9 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
 const Dashboard = () => {
 
-    const globalUser = useSelector(state => state.userReducer)
-    console.log('dashboard',globalUser.data.data)
+    // const globalUser = useSelector(state => state.userReducer)
+    // console.log('dashboard',globalUser.data.data)
 
     const name = localStorage.getItem('name')
     return (

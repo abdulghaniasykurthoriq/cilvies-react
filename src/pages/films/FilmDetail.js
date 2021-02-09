@@ -3,6 +3,7 @@ import { FaEye, FaPencilAlt, FaTrash } from "react-icons/fa";
 import FilmService from "../../services/FilmService";
 import Swal from 'sweetalert2';
 import { FilmDetailWrap, ContainerDetail, ImageDetail, TextWrap, CardFilmOptions, StatusPublished } from "./FilmDetailStyled";
+import HistoryService from "../../services/HistoryService";
 
 class FilmDetail extends Component {
   state = {
@@ -11,6 +12,7 @@ class FilmDetail extends Component {
     title: "",
     description: "",
     published: "",
+    price:0,
     statusPublished:false
   };
   componentDidMount() {
@@ -28,9 +30,13 @@ class FilmDetail extends Component {
           title: data.title,
           description: data.description,
           published: data.published,
+          price:data.price
         });
-        {this.state.published === "published" && this.setState({statusPublished:true}) }
-        {this.state.published === "unpublished" && this.setState({statusPublished:false}) }
+        if(this.state.published === "published"){
+          this.setState({statusPublished:true})
+        }else{this.setState({statusPublished:false})}
+        // {this.state.published === "published" && this.setState({statusPublished:true}) }
+        // {this.state.published === "unpublished" && this.setState({statusPublished:false}) }
       })
       .catch((error) => {
         console.error(error);
@@ -57,6 +63,12 @@ class FilmDetail extends Component {
     await FilmService.delete(this.state.id)
       .then((response) => {
         console.log("berhasil di hapus " + this.state.title);
+        const dataHistory = {
+          username:localStorage.getItem('name'),
+          title:this.state.title,
+          action:'deleted'
+        }
+        HistoryService.create(dataHistory)
         this.props.history.push('/')
 
       })
@@ -74,7 +86,7 @@ class FilmDetail extends Component {
   };
 
   render() {
-   
+
 
     return (
       <FilmDetailWrap>
@@ -89,7 +101,11 @@ class FilmDetail extends Component {
                 <b>Description</b><br/>
                 {this.state.description}
             </p>
-            <p>   
+            <p>
+                <b>Price</b><br/>
+                Rp.{this.state.price}
+            </p>
+            <p>
               <b>Sinopsis</b><br/>
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
@@ -104,12 +120,12 @@ class FilmDetail extends Component {
             </p>
 
             <p><b>Status</b><br/>{this.state.published}</p>
-          
+
 
           <CardFilmOptions>
             <StatusPublished status={this.state.statusPublished}>
                 <FaEye />
-            </StatusPublished>  
+            </StatusPublished>
             <FaPencilAlt onClick={this.EditFilm}  />
             <FaTrash onClick={this.DeleteFilm} />
         </CardFilmOptions>

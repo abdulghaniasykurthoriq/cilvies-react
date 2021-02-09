@@ -12,6 +12,9 @@ class FilmService {
     searchByTitle(title){
         return httpClient.get(`/films?title=${title}`)
     }
+    searchByCategory(category){
+        return httpClient.get(`/films?category=${category}`)
+    }
     create(data){
         return httpClient.post("/films/", data);
     }

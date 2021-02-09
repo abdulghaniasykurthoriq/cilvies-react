@@ -3,6 +3,7 @@ import FilmService from "../../services/FilmService";
 import { Dropdown } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import HistoryService from "../../services/HistoryService";
 
 class EditFilm extends React.Component {
   state = {
@@ -11,7 +12,9 @@ class EditFilm extends React.Component {
     title: "",
     description: "",
     published: "",
-    erorMsg:""
+    erorMsg:"",
+    category:"",
+    price:0,
   };
 
   componentDidMount() {
@@ -27,7 +30,16 @@ class EditFilm extends React.Component {
           title: data.title,
           description: data.description,
           published: data.published,
+          category:data.category,
+          price:data.price
         });
+        const user = localStorage.getItem('name');
+        const dataHistory = {
+          username:user,
+          title:data.title,
+          action:'update'
+        }
+        HistoryService.create(dataHistory)
       })
       .catch(e => {
         console.log(e.response.data.message)
@@ -98,6 +110,15 @@ class EditFilm extends React.Component {
                     onChange={(e) => this.setState({ image: e.target.value })}
                   />
                 </div>
+                <div className="form-group text-left">
+                  <label>Price</label>
+                  <input
+                    placeholder="Price ..."
+                    className="form-control"
+                    value={this.state.price}
+                    onChange={(e) => this.setState({ price: e.target.value })}
+                  />
+                </div>
                 {
                   this.state.erorMsg && (
                     <div className="alert alert-danger">
@@ -106,6 +127,24 @@ class EditFilm extends React.Component {
                   )
                 }
 
+                <div className="d-flex justify-content-left mb-2">
+                <Dropdown>
+                  <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                      {this.state.category}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => this.setState({category:'uncategory'})}>uncategory</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.setState({category:'comedy'})}>comedy</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.setState({category:'horor'})}>horor</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.setState({category:'action'})}>action</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.setState({category:'romance'})}>romance</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.setState({category:'thriller'})}>thriller</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.setState({category:'drama'})}>drama</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.setState({category:'fantasy'})}>fantasy</Dropdown.Item>
+                    <Dropdown.Item onClick={() => this.setState({category:'mistery'})}>mistery</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                </div>
                 <div className="d-flex justify-content-between">
                 <Dropdown>
                   <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -122,7 +161,7 @@ class EditFilm extends React.Component {
                 </div>
                 <div style={{ marginTop: "20px" }}>
                   <p>
-                    lupa yaa <Link to="/">See any film</Link>
+                    <Link to="/">See any film</Link>
                   </p>
                 </div>
               </div>

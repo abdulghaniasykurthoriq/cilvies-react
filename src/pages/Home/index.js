@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import FilmList from "../films/FilmList";
 import { Container, Carousel, CarouselItem } from "react-bootstrap";
 import { Container as Cz, HomeWrap, Iklan } from "./HomeStyled";
 import { FaSearch } from "react-icons/fa";
 import FilmService from "../../services/FilmService";
 import { Link } from "react-scroll";
-import { connect } from "react-redux";
 class Home extends React.Component {
   state = {
     films: [],
     search: "",
     totalSearch: "",
+    onCategory:''
   };
 
   componentDidMount = async () => {
@@ -26,7 +26,7 @@ class Home extends React.Component {
         console.error(error);
       });
     // }
-  
+
   };
 
   onSubmitData = async (e) => {
@@ -46,14 +46,33 @@ class Home extends React.Component {
   };
 
   onChangeSearch = (e) => {
- 
+
     this.setState({
       search: e.target.value,
       totalSearch: "",
+      onCategory:""
     });
   };
+  onCategory = async(e) => {
+    e.preventDefault();
+    await FilmService.searchByCategory(this.state.onCategory)
+      .then((response) => {
+        const data = response.data;
+        this.setState({
+          films: data,
+          search:"",
+          totalSearch: data.length,
+        });
+        console.log("banyaknya data", data.length);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
 
   render() {
+    console.log('invo', this.state.onCategory)
     return (
       <HomeWrap>
         <Container>
@@ -126,7 +145,7 @@ class Home extends React.Component {
               <div className="flex-lg-column justify-content-center m-2">
                 <h3 className="text-light">
                   Ditemukan {this.state.totalSearch} dengan pencarian{" "}
-                  {this.state.search}
+                  {this.state.search}{this.state.onCategory}
                 </h3>
                 <button className="btn btn-success btn-xs ml-2">
                   <Link activeClass="active" to="films">
@@ -136,15 +155,23 @@ class Home extends React.Component {
               </div>
             )}
 
+            <form onSubmit={this.onCategory}>
             <div>
-              <button className="btn btn-success">Populer</button>
-              <button className="btn btn-primary m-2">
-                Paling banyak di tonton
-              </button>
-              <button className="btn btn-warning">Horor</button>
-              <button className="btn btn-secondary">Horor</button>
-              <button className="btn btn-info">Horor</button>
+              <button onClick={()=>this.setState({onCategory:'comedy'})} className="btn btn-success">Comedy</button>
+              <button onClick={()=>this.setState({onCategory:'horor'})} className="btn btn-primary m-2">Horor</button>
+              <button onClick={()=>this.setState({onCategory:'action'})} className="btn btn-warning">Action</button>
+              <button onClick={()=>this.setState({onCategory:'romance'})} className="btn btn-secondary m-2">Romance</button>
+              <button onClick={()=>this.setState({onCategory:'thriller'})} className="btn btn-info">Thriller</button>
             </div>
+            <div>
+              <button onClick={()=>this.setState({onCategory:'drama'})} className="btn btn-info">Drama</button>
+              <button onClick={()=>this.setState({onCategory:'fantasy'})} className="btn btn-success m-2">Fantasy</button>
+              <button onClick={()=>this.setState({onCategory:'mistery'})} className="btn btn-warning">Mistery</button>
+            </div>
+            <div>
+              <button onClick={()=>this.setState({onCategory:'uncategory'})} className="btn btn-info">Uncategory</button>
+            </div>
+            </form>
           </Cz>
           <p>Component Home</p>
 
@@ -159,24 +186,28 @@ class Home extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  console.log('cila',state)
-  return{
-      wew:state.userReducer
-  }
-}
 
-// const data = {
-//   "title":"della"
-// }
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//       handle: () => dispatch({type:'UPDATE_DATA_USER', payload:data})
-//   }
-// }
+export default Home;
 
-export default connect(mapStateToProps)(Home);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // import React, { useState } from "react";
 // import FilmList from "../films/FilmList";

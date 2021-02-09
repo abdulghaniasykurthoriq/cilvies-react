@@ -6,7 +6,7 @@ const Register = () => {
     const[username,setUsername] = useState('');
     const[email,setEmail] = useState('')
     const[password,setPassword] = useState('')
-    const[errorMsg, setErrorMsg] = useState('')
+    // const[errorMsg, setErrorMsg] = useState('')
     const[errName,setErrName] = useState('')
     const[errEmail,setErrEmail] = useState('')
     const[errPassword,setErrPassword] = useState('')
@@ -30,7 +30,7 @@ const Register = () => {
           })
         .catch(e => {
             const dataEror = e.response.data.message;
-            setErrorMsg(e.response.data.message);
+            // setErrorMsg(e.response.data.message);
             if(dataEror === "Username can't be empty"){
               setErrName(dataEror)
             }else if(dataEror === "Email can't be empty" || dataEror === "Email macam apa ini"){
@@ -46,17 +46,17 @@ const Register = () => {
 
     const onChangeUsername = (e) => {
         setUsername(e.target.value)
-        setErrorMsg('')
+        // setErrorMsg('')
         setErrName('')
     }
     const onChangeEmail = (e) => {
         setEmail(e.target.value)
-        setErrorMsg('')
+        // setErrorMsg('')
         setErrEmail('')
     }
     const onChangePassword = (e) => {
         setPassword(e.target.value)
-        setErrorMsg('')
+        // setErrorMsg('')
         setErrPassword('')
     }
 
